@@ -1,0 +1,8 @@
+{
+  "query": "\nCREATE TABLE `activity_merit_record` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`userId` int NOT NULL,\n\t`date` varchar(10) NOT NULL,\n\t`activityType` enum('steps','energyBurned','sleep','walking','swimming','cycling','running','standing','mindfulness','sunExposure','handwash','stairs') NOT NULL,\n\t`dataValue` decimal(15,2) NOT NULL,\n\t`unit` varchar(20) NOT NULL,\n\t`baseMerit` int DEFAULT 0,\n\t`bonusMerit` int DEFAULT 0,\n\t`totalMerit` int DEFAULT 0,\n\t`isFirstAchievement` boolean DEFAULT false,\n\t`firstAchievementBonus` int DEFAULT 0,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `activity_merit_record_id` PRIMARY KEY(`id`)\n);\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 42FiHejsdbbKaob.e854eb9aa92b --database 4W2VWia4499quTPj6qAR5E --execute \nCREATE TABLE `activity_merit_record` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`userId` int NOT NULL,\n\t`date` varchar(10) NOT NULL,\n\t`activityType` enum('steps','energyBurned','sleep','walking','swimming','cycling','running','standing','mindfulness','sunExposure','handwash','stairs') NOT NULL,\n\t`dataValue` decimal(15,2) NOT NULL,\n\t`unit` varchar(20) NOT NULL,\n\t`baseMerit` int DEFAULT 0,\n\t`bonusMerit` int DEFAULT 0,\n\t`totalMerit` int DEFAULT 0,\n\t`isFirstAchievement` boolean DEFAULT false,\n\t`firstAchievementBonus` int DEFAULT 0,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `activity_merit_record_id` PRIMARY KEY(`id`)\n);\n",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1050 (42S01) at line 2: Table '4W2VWia4499quTPj6qAR5E.activity_merit_record' already exists"
+  ]
+}

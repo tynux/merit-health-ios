@@ -1,0 +1,12 @@
+{
+  "query": "\nCREATE TABLE IF NOT EXISTS `daily_merit_record` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`userId` int NOT NULL,\n\t`date` varchar(10) NOT NULL,\n\t`baseMerit` int DEFAULT 0,\n\t`bonusMerit` int DEFAULT 0,\n\t`totalEarned` int DEFAULT 0,\n\t`heartRateDeduction` int DEFAULT 0,\n\t`lazinessDeduction` int DEFAULT 0,\n\t`totalDeducted` int DEFAULT 0,\n\t`netMerit` int DEFAULT 0,\n\t`deductionReasons` json DEFAULT ('[]'),\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `daily_merit_record_id` PRIMARY KEY(`id`)\n);\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 42FiHejsdbbKaob.e854eb9aa92b --database 4W2VWia4499quTPj6qAR5E --execute \nCREATE TABLE IF NOT EXISTS `daily_merit_record` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`userId` int NOT NULL,\n\t`date` varchar(10) NOT NULL,\n\t`baseMerit` int DEFAULT 0,\n\t`bonusMerit` int DEFAULT 0,\n\t`totalEarned` int DEFAULT 0,\n\t`heartRateDeduction` int DEFAULT 0,\n\t`lazinessDeduction` int DEFAULT 0,\n\t`totalDeducted` int DEFAULT 0,\n\t`netMerit` int DEFAULT 0,\n\t`deductionReasons` json DEFAULT ('[]'),\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `daily_merit_record_id` PRIMARY KEY(`id`)\n);\n",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1064 (42000) at line 2: You have an error in your SQL syntax; check the manual that corresponds to your TiDB version for the right syntax to use line 12 column 39 near \"'[]'),",
+    "\t`createdAt` timestamp NOT NULL DEFAULT (now()),",
+    "\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,",
+    "\tCONSTRAINT `daily_merit_record_id` PRIMARY KEY(`id`)",
+    ")\""
+  ]
+}

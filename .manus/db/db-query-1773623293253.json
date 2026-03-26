@@ -1,0 +1,19 @@
+{
+  "query": "SHOW TABLES LIKE '%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 42FiHejsdbbKaob.e854eb9aa92b --database 4W2VWia4499quTPj6qAR5E --execute SHOW TABLES LIKE '%';",
+  "rows": [
+    {
+      "Tables_in_4W2VWia4499quTPj6qAR5E (%)": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_4W2VWia4499quTPj6qAR5E (%)": "activity_merit_record"
+    },
+    {
+      "Tables_in_4W2VWia4499quTPj6qAR5E (%)": "users"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_4W2VWia4499quTPj6qAR5E (%)\n__drizzle_migrations\nactivity_merit_record\nusers\n",
+  "stderr": "",
+  "execution_time_ms": 1589
+}
