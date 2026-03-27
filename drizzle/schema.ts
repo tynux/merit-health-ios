@@ -255,3 +255,20 @@ export const healthSuggestions = mysqlTable("health_suggestions", {
 
 export type HealthSuggestion = typeof healthSuggestions.$inferSelect;
 export type InsertHealthSuggestion = typeof healthSuggestions.$inferInsert;
+
+/**
+ * User device tokens for push notifications
+ */
+export const userDeviceTokens = mysqlTable("user_device_tokens", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  deviceToken: varchar("deviceToken", { length: 200 }).notNull(),
+  platform: mysqlEnum("platform", ["ios", "android"]).default("ios").notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  lastUsedAt: timestamp("lastUsedAt").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserDeviceToken = typeof userDeviceTokens.$inferSelect;
+export type InsertUserDeviceToken = typeof userDeviceTokens.$inferInsert;
