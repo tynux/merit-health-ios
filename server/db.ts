@@ -10,10 +10,12 @@ import {
   badges,
   heartRateAlerts,
   healthSuggestions,
+  userDeviceTokens,
   type DailyHealthData,
   type DailyMeritRecord,
   type ActivityProgress,
   type Badge,
+  type UserDeviceToken,
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -373,4 +375,130 @@ export async function updateUserTotalMerit(userId: number, totalMerit: number) {
     .where(eq(users.id, userId));
 
   return await getUserById(userId);
+}
+
+// Device token management
+export async function upsertDeviceToken(
+  userId: number, 
+  deviceToken: string, 
+  platform: "ios" | "android" = "ios"
+): Promise<UserDeviceToken | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    // 检查是否已存在
+    const existing = await db
+      .select()
+      .from(userDeviceTokens)
+      .where(
+        and(
+          eq(userDeviceTokens.userId, userId),
+          eq(userDeviceTokens.deviceToken, deviceToken)
+        )
+      )
+      .limit(1);
+
+    if (existing.length > 0) {
+      // 更新现有令牌
+      await db
+        .update(userDeviceTokens)
+        .set({ 
+          isActive: true,
+          lastUsedAt: new Date(),
+          updatedAt: new Date() 
+        })
+        .where(eq(userDeviceTokens.id, existing[0].id));
+      
+      return existing[0];
+    } else {
+      // 插入新令牌
+      const result = await db
+        .insert(userDeviceTokens)
+        .values({
+          userId,
+          deviceToken,
+          platform,
+          isActive: true,
+          lastUsedAt: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+
+      // 获取插入的记录
+      const newToken = await db
+        .select()
+        .from(userDeviceTokens)
+        .where(eq(userDeviceTokens.deviceToken, deviceToken))
+        .limit(1);
+
+      return newToken.length > 0 ? newToken[0] : null;
+    }
+  } catch (error) {
+    console.error("[Database] Failed to upsert device token:", error);
+    return null;
+  }
+}
+
+export async function getUserDeviceTokens(userId: number): Promise<UserDeviceToken[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  try {
+    const tokens = await db
+      .select()
+      .from(userDeviceTokens)
+      .where(
+        and(
+          eq(userDeviceTokens.userId, userId),
+          eq(userDeviceTokens.isActive, true)
+        )
+      )
+      .orderBy(desc(userDeviceTokens.lastUsedAt));
+
+    return tokens;
+  } catch (error) {
+    console.error("[Database] Failed to get user device tokens:", error);
+    return [];
+  }
+}
+
+export async function deactivateDeviceToken(tokenId: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  try {
+    await db
+      .update(userDeviceTokens)
+      .set({ 
+        isActive: false,
+        updatedAt: new Date() 
+      })
+      .where(eq(userDeviceTokens.id, tokenId));
+
+    return true;
+  } catch (error) {
+    console.error("[Database] Failed to deactivate device token:", error);
+    return false;
+  }
+}
+
+export async function deactivateAllUserDeviceTokens(userId: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  try {
+    await db
+      .update(userDeviceTokens)
+      .set({ 
+        isActive: false,
+        updatedAt: new Date() 
+      })
+      .where(eq(userDeviceTokens.userId, userId));
+
+    return true;
+  } catch (error) {
+    console.error("[Database] Failed to deactivate user device tokens:", error);
+    return false;
+  }
 }

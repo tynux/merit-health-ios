@@ -260,6 +260,73 @@ export const appRouter = router({
         }
       }),
   }),
+
+  // 推送通知管理
+  notification: router({
+    /**
+     * 注册设备令牌
+     */
+    registerDeviceToken: publicProcedure
+      .input(
+        z.object({
+          deviceToken: z.string(),
+          platform: z.enum(["ios", "android"]).default("ios"),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        try {
+          const userId = ctx.user?.id || 1; // 演示用户ID
+          const success = await NotificationService.registerDeviceToken(
+            userId,
+            input.deviceToken,
+            input.platform
+          );
+          
+          return {
+            success,
+            message: success ? "设备令牌注册成功" : "设备令牌注册失败",
+          };
+        } catch (error) {
+          console.error("Error registering device token:", error);
+          return {
+            success: false,
+            message: "设备令牌注册失败",
+          };
+        }
+      }),
+
+    /**
+     * 测试推送通知
+     */
+    testPushNotification: publicProcedure
+      .mutation(async ({ ctx }) => {
+        try {
+          const userId = ctx.user?.id || 1; // 演示用户ID
+          
+          // 发送测试通知
+          await NotificationService.sendPushNotificationToUser(userId, {
+            title: "测试推送通知",
+            body: "这是一条测试推送通知，用于验证推送功能是否正常工作。",
+            type: "daily_settlement",
+            data: {
+              test: true,
+              timestamp: new Date().toISOString(),
+            },
+          });
+
+          return {
+            success: true,
+            message: "测试推送通知已发送",
+          };
+        } catch (error) {
+          console.error("Error sending test push notification:", error);
+          return {
+            success: false,
+            message: "测试推送通知发送失败",
+          };
+        }
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

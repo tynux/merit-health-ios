@@ -214,8 +214,8 @@ export async function settleDailyMerit(userId: number, date: string) {
 
   // Send notifications
   try {
-    // Notify daily settlement
-    await NotificationService.notifyDailySettlement(
+    // Notify daily settlement (with push notification)
+    await NotificationService.notifyDailySettlementWithPush(
       userId,
       { date, netMerit, baseMerit: totalBaseMerit, bonusMerit: totalBonusMerit, totalEarned, heartRateDeduction: 0, lazinessDeduction: 0, totalDeducted, deductionReasons, createdAt: new Date(), updatedAt: new Date(), userId } as any,
       user.name || undefined
@@ -225,7 +225,7 @@ export async function settleDailyMerit(userId: number, date: string) {
     if (maxHeartRate > 0) {
       const threshold = user.gender === "female" ? HEART_RATE_THRESHOLDS.female : HEART_RATE_THRESHOLDS.male;
       if (maxHeartRate > threshold) {
-        await NotificationService.notifyHeartRateAlert(
+        await NotificationService.notifyHeartRateAlertWithPush(
           userId,
           maxHeartRate,
           threshold,
@@ -246,7 +246,7 @@ export async function settleDailyMerit(userId: number, date: string) {
           inactiveActivities.push(config.name);
         }
       }
-      await NotificationService.notifySlothPenalty(
+      await NotificationService.notifySlothPenaltyWithPush(
         userId,
         LAZINESS_DEDUCTION,
         inactiveActivities,
